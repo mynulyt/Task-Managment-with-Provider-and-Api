@@ -1,11 +1,11 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:task_managerapi/Data/services/api_caller.dart';
-import 'package:task_managerapi/Data/utils/urls.dart';
-import 'package:task_managerapi/ui/widgets/centered_progress_indecator.dart';
-import 'package:task_managerapi/ui/widgets/screen_background.dart';
-import 'package:task_managerapi/ui/widgets/snak_bar_message.dart';
+import 'package:task_mngwithprovider/Data/services/api_caller.dart';
+import 'package:task_mngwithprovider/Data/utils/urls.dart';
+import 'package:task_mngwithprovider/ui/widgets/centered_progress_indecator.dart';
+import 'package:task_mngwithprovider/ui/widgets/screen_background.dart';
+import 'package:task_mngwithprovider/ui/widgets/snak_bar_message.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});

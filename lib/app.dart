@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:task_managerapi/ui/screens/login_screen.dart';
-import 'package:task_managerapi/ui/screens/main_nav_bar_holder_screen.dart';
-import 'package:task_managerapi/ui/screens/sign_up_screen.dart';
-import 'package:task_managerapi/ui/screens/splash_screen.dart';
-import 'package:task_managerapi/ui/screens/update_profile_screen.dart';
+import 'package:task_mngwithprovider/ui/screens/login_screen.dart';
+import 'package:task_mngwithprovider/ui/screens/main_nav_bar_holder_screen.dart';
+import 'package:task_mngwithprovider/ui/screens/sign_up_screen.dart';
+import 'package:task_mngwithprovider/ui/screens/splash_screen.dart';
+import 'package:task_mngwithprovider/ui/screens/update_profile_screen.dart';
 
 class TaskManagerApp extends StatelessWidget {
   const TaskManagerApp({super.key});

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:task_managerapi/Data/model/task_model.dart';
-import 'package:task_managerapi/Data/services/api_caller.dart';
-import 'package:task_managerapi/Data/utils/urls.dart';
-import 'package:task_managerapi/ui/widgets/snak_bar_message.dart';
+import 'package:task_mngwithprovider/Data/model/task_model.dart';
+import 'package:task_mngwithprovider/Data/services/api_caller.dart';
+import 'package:task_mngwithprovider/Data/utils/urls.dart';
+import 'package:task_mngwithprovider/ui/widgets/snak_bar_message.dart';
 
 class TaskCard extends StatefulWidget {
   const TaskCard({

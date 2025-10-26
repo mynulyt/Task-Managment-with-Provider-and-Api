@@ -1,9 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:task_managerapi/Data/services/api_caller.dart';
-import 'package:task_managerapi/Data/utils/urls.dart';
-import 'package:task_managerapi/ui/screens/login_screen.dart';
-import 'package:task_managerapi/ui/widgets/screen_background.dart';
+import 'package:task_mngwithprovider/Data/services/api_caller.dart';
+import 'package:task_mngwithprovider/Data/utils/urls.dart';
+import 'package:task_mngwithprovider/ui/screens/login_screen.dart';
+import 'package:task_mngwithprovider/ui/widgets/screen_background.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   final String email;

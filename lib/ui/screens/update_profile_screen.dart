@@ -2,14 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:task_managerapi/Data/model/user_model.dart';
-import 'package:task_managerapi/Data/services/api_caller.dart';
-import 'package:task_managerapi/Data/utils/urls.dart';
-import 'package:task_managerapi/ui/controller/auth_controller.dart';
-import 'package:task_managerapi/ui/widgets/centered_progress_indecator.dart';
-import 'package:task_managerapi/ui/widgets/screen_background.dart';
-import 'package:task_managerapi/ui/widgets/snak_bar_message.dart';
-import 'package:task_managerapi/ui/widgets/tm_app_bar.dart';
+import 'package:task_mngwithprovider/Data/model/user_model.dart';
+import 'package:task_mngwithprovider/Data/services/api_caller.dart';
+import 'package:task_mngwithprovider/Data/utils/urls.dart';
+import 'package:task_mngwithprovider/ui/controller/auth_controller.dart';
+import 'package:task_mngwithprovider/ui/widgets/centered_progress_indecator.dart';
+import 'package:task_mngwithprovider/ui/widgets/screen_background.dart';
+import 'package:task_mngwithprovider/ui/widgets/snak_bar_message.dart';
+import 'package:task_mngwithprovider/ui/widgets/tm_app_bar.dart';
 
 import '../widgets/photo_picker_field.dart';
 

@@ -1,10 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-
-import 'package:task_managerapi/ui/controller/auth_controller.dart';
-import 'package:task_managerapi/ui/screens/login_screen.dart';
-import 'package:task_managerapi/ui/screens/update_profile_screen.dart';
+import 'package:task_mngwithprovider/ui/controller/auth_controller.dart';
+import 'package:task_mngwithprovider/ui/screens/login_screen.dart';
+import 'package:task_mngwithprovider/ui/screens/update_profile_screen.dart';
 
 class TMAppBar extends StatefulWidget implements PreferredSizeWidget {
   const TMAppBar({super.key, this.fromUpdateProfile});
