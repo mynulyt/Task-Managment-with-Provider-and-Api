@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:task_managerapi/ui/screens/cancelled_task_screen.dart';
-import 'package:task_managerapi/ui/screens/completed_task_screen.dart';
-import 'package:task_managerapi/ui/screens/new_task_screen.dart';
-import 'package:task_managerapi/ui/screens/progress_task_screen.dart';
+import 'package:task_mngwithprovider/ui/screens/cancelled_task_screen.dart';
+import 'package:task_mngwithprovider/ui/screens/completed_task_screen.dart';
+import 'package:task_mngwithprovider/ui/screens/new_task_screen.dart';
+import 'package:task_mngwithprovider/ui/screens/progress_task_screen.dart';
 
 import '../widgets/tm_app_bar.dart';
 
