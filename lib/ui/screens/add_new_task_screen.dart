@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:task_managerapi/Data/services/api_caller.dart';
-import 'package:task_managerapi/Data/utils/urls.dart';
-import 'package:task_managerapi/ui/widgets/centered_progress_indecator.dart';
-import 'package:task_managerapi/ui/widgets/screen_background.dart';
-import 'package:task_managerapi/ui/widgets/snak_bar_message.dart';
-import 'package:task_managerapi/ui/widgets/tm_app_bar.dart';
+import 'package:task_mngwithprovider/Data/services/api_caller.dart';
+import 'package:task_mngwithprovider/Data/utils/urls.dart';
+import 'package:task_mngwithprovider/ui/widgets/centered_progress_indecator.dart';
+import 'package:task_mngwithprovider/ui/widgets/screen_background.dart';
+import 'package:task_mngwithprovider/ui/widgets/snak_bar_message.dart';
+import 'package:task_mngwithprovider/ui/widgets/tm_app_bar.dart';
 
 class AddNewTaskScreen extends StatefulWidget {
   const AddNewTaskScreen({super.key});

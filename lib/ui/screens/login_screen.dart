@@ -1,16 +1,16 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:task_managerapi/Data/model/user_model.dart';
-import 'package:task_managerapi/Data/services/api_caller.dart';
-import 'package:task_managerapi/Data/utils/urls.dart';
-import 'package:task_managerapi/ui/controller/auth_controller.dart';
-import 'package:task_managerapi/ui/screens/forgot_password_verify_email_screen.dart';
-import 'package:task_managerapi/ui/screens/main_nav_bar_holder_screen.dart';
-import 'package:task_managerapi/ui/screens/sign_up_screen.dart';
-import 'package:task_managerapi/ui/widgets/centered_progress_indecator.dart';
-import 'package:task_managerapi/ui/widgets/screen_background.dart';
-import 'package:task_managerapi/ui/widgets/snak_bar_message.dart';
+import 'package:task_mngwithprovider/Data/model/user_model.dart';
+import 'package:task_mngwithprovider/Data/services/api_caller.dart';
+import 'package:task_mngwithprovider/Data/utils/urls.dart';
+import 'package:task_mngwithprovider/ui/controller/auth_controller.dart';
+import 'package:task_mngwithprovider/ui/screens/forgot_password_verify_email_screen.dart';
+import 'package:task_mngwithprovider/ui/screens/main_nav_bar_holder_screen.dart';
+import 'package:task_mngwithprovider/ui/screens/sign_up_screen.dart';
+import 'package:task_mngwithprovider/ui/widgets/centered_progress_indecator.dart';
+import 'package:task_mngwithprovider/ui/widgets/screen_background.dart';
+import 'package:task_mngwithprovider/ui/widgets/snak_bar_message.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

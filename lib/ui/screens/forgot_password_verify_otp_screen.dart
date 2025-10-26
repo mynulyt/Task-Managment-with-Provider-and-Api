@@ -1,11 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:task_managerapi/Data/services/api_caller.dart';
-import 'package:task_managerapi/Data/utils/urls.dart';
-import 'package:task_managerapi/ui/screens/login_screen.dart';
-import 'package:task_managerapi/ui/screens/reset_password_screen.dart';
-import 'package:task_managerapi/ui/widgets/screen_background.dart';
+import 'package:task_mngwithprovider/Data/services/api_caller.dart';
+import 'package:task_mngwithprovider/Data/utils/urls.dart';
+import 'package:task_mngwithprovider/ui/screens/login_screen.dart';
+import 'package:task_mngwithprovider/ui/screens/reset_password_screen.dart';
+import 'package:task_mngwithprovider/ui/widgets/screen_background.dart';
 
 class ForgotPasswordVerifyOtpScreen extends StatefulWidget {
   final String email;
@@ -125,7 +125,6 @@ class _ForgotPasswordVerifyOtpScreenState
       if (!mounted) return;
 
       if (res.isSuccess) {
-        // নেভিগেশনের পরে এই স্ক্রিন dispose হবে, তাই আর UI টাচ করবো না
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(

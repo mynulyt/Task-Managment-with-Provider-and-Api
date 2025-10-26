@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
-import 'package:task_managerapi/app.dart';
-import 'package:task_managerapi/ui/controller/auth_controller.dart';
-import 'package:task_managerapi/ui/screens/login_screen.dart';
+import 'package:task_mngwithprovider/app.dart';
+import 'package:task_mngwithprovider/ui/controller/auth_controller.dart';
+import 'package:task_mngwithprovider/ui/screens/login_screen.dart';
 
 class ApiCaller {
   static final Logger _logger = Logger();
