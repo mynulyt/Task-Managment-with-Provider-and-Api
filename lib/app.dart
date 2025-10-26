@@ -31,7 +31,7 @@ class TaskManagerApp extends StatelessWidget {
         ),
         filledButtonTheme: FilledButtonThemeData(
           style: FilledButton.styleFrom(
-            backgroundColor: Colors.green,
+            backgroundColor: Colors.purple,
             fixedSize: Size.fromWidth(double.maxFinite),
             padding: EdgeInsets.symmetric(vertical: 12),
             shape: RoundedRectangleBorder(
