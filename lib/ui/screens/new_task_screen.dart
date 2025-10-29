@@ -20,13 +20,13 @@ class NewTaskScreen extends StatefulWidget {
 
 class _NewTaskScreenState extends State<NewTaskScreen> {
   bool _getTaskStatusCountInProgress = false;
-
   List<TaskStatusCountModel> _taskStatusCountList = [];
 
   @override
   void initState() {
     super.initState();
     _getAllTaskStatusCount();
+    context.read<NewTaskListProvider>().getNewTasks();
   }
 
   Future<void> _getAllTaskStatusCount() async {
@@ -110,16 +110,10 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     );
   }
 
-  Future<void> _onTapAddNewTaskButton() async {
-    final bool? shouldReload = await Navigator.push<bool>(
+  void _onTapAddNewTaskButton() {
+    Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const AddNewTaskScreen()),
     );
-
-    if (shouldReload == true) {
-      _getAllTaskStatusCount();
-
-      showSnackBarMessage(context, 'New task added');
-    }
   }
 }
