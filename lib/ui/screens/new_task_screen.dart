@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:task_mngwithprovider/Data/model/task_model.dart';
 import 'package:task_mngwithprovider/Data/model/task_status_count.dart';
 import 'package:task_mngwithprovider/Data/services/api_caller.dart';
 import 'package:task_mngwithprovider/Data/utils/urls.dart';
@@ -21,15 +20,13 @@ class NewTaskScreen extends StatefulWidget {
 
 class _NewTaskScreenState extends State<NewTaskScreen> {
   bool _getTaskStatusCountInProgress = false;
-  bool _getNewTaskInProgress = false;
+
   List<TaskStatusCountModel> _taskStatusCountList = [];
-  List<TaskModel> _newTaskList = [];
 
   @override
   void initState() {
     super.initState();
     _getAllTaskStatusCount();
-    _getAllNewTasks();
   }
 
   Future<void> _getAllTaskStatusCount() async {
@@ -48,25 +45,6 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       showSnackBarMessage(context, response.errorMessage!);
     }
     _getTaskStatusCountInProgress = false;
-    setState(() {});
-  }
-
-  Future<void> _getAllNewTasks() async {
-    _getNewTaskInProgress = true;
-    setState(() {});
-    final ApiResponse response = await ApiCaller.getRequest(
-      url: Urls.newTaskListUrl,
-    );
-    if (response.isSuccess) {
-      List<TaskModel> list = [];
-      for (Map<String, dynamic> jsonData in response.responseData['data']) {
-        list.add(TaskModel.fromJson(jsonData));
-      }
-      _newTaskList = list;
-    } else {
-      showSnackBarMessage(context, response.errorMessage!);
-    }
-    _getNewTaskInProgress = false;
     setState(() {});
   }
 
@@ -140,7 +118,6 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
 
     if (shouldReload == true) {
       _getAllTaskStatusCount();
-      _getAllNewTasks();
 
       showSnackBarMessage(context, 'New task added');
     }
