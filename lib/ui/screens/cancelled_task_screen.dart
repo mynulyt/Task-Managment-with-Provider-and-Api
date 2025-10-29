@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:task_mngwithprovider/Data/model/task_model.dart';
-import 'package:task_mngwithprovider/Data/utils/urls.dart';
+import 'package:provider/provider.dart';
+import 'package:task_mngwithprovider/ui/controller/task_list_provider.dart';
 import 'package:task_mngwithprovider/ui/widgets/centered_progress_indecator.dart';
 import 'package:task_mngwithprovider/ui/widgets/snak_bar_message.dart';
 
-import '../../data/services/api_caller.dart';
 import '../widgets/task_card.dart';
 
 class CancelledTaskScreen extends StatefulWidget {
@@ -15,32 +14,12 @@ class CancelledTaskScreen extends StatefulWidget {
 }
 
 class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
-  bool _getCancelledTaskInProgress = false;
-  List<TaskModel> _cancelledTaskList = [];
-
   @override
   void initState() {
     super.initState();
-    _getAllCancelledTasks();
-  }
-
-  Future<void> _getAllCancelledTasks() async {
-    _getCancelledTaskInProgress = true;
-    setState(() {});
-    final ApiResponse response = await ApiCaller.getRequest(
-      url: Urls.cancelledTaskListUrl,
-    );
-    if (response.isSuccess) {
-      List<TaskModel> list = [];
-      for (Map<String, dynamic> jsonData in response.responseData['data']) {
-        list.add(TaskModel.fromJson(jsonData));
-      }
-      _cancelledTaskList = list;
-    } else {
-      showSnackBarMessage(context, response.errorMessage!);
-    }
-    _getCancelledTaskInProgress = false;
-    setState(() {});
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CancelledTaskListProvider>().fetch();
+    });
   }
 
   @override
@@ -48,21 +27,24 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Visibility(
-          visible: _getCancelledTaskInProgress == false,
-          replacement: CenteredProgressIndecator(),
-          child: ListView.separated(
-            itemCount: _cancelledTaskList.length,
-            itemBuilder: (context, index) {
-              return TaskCard(
-                taskModel: _cancelledTaskList[index],
-                refreshParent: () {
-                  _getAllCancelledTasks();
-                },
-              );
-            },
-            separatorBuilder: (context, index) => SizedBox(height: 8),
-          ),
+        child: Consumer<CancelledTaskListProvider>(
+          builder: (_, p, __) {
+            if (p.loading) return const CenteredProgressIndecator();
+            if (p.error != null) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted) showSnackBarMessage(context, p.error!);
+              });
+            }
+            return ListView.separated(
+              itemCount: p.items.length,
+              itemBuilder: (_, i) => TaskCard(
+                taskModel: p.items[i],
+                refreshParent: () =>
+                    context.read<CancelledTaskListProvider>().fetch(),
+              ),
+              separatorBuilder: (_, __) => const SizedBox(height: 8),
+            );
+          },
         ),
       ),
     );
