@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:task_mngwithprovider/Data/model/task_model.dart';
-import 'package:task_mngwithprovider/Data/utils/urls.dart';
+import 'package:provider/provider.dart';
+import 'package:task_mngwithprovider/ui/controller/task_list_provider.dart';
 import 'package:task_mngwithprovider/ui/widgets/centered_progress_indecator.dart';
 import 'package:task_mngwithprovider/ui/widgets/snak_bar_message.dart';
-
-import '../../data/services/api_caller.dart';
 
 import '../widgets/task_card.dart';
 
@@ -16,32 +14,12 @@ class ProgressTaskScreen extends StatefulWidget {
 }
 
 class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
-  bool _getProgressTaskInProgress = false;
-  List<TaskModel> _progressTaskList = [];
-
   @override
   void initState() {
     super.initState();
-    _getAllProgressTasks();
-  }
-
-  Future<void> _getAllProgressTasks() async {
-    _getProgressTaskInProgress = true;
-    setState(() {});
-    final ApiResponse response = await ApiCaller.getRequest(
-      url: Urls.progressTaskListUrl,
-    );
-    if (response.isSuccess) {
-      List<TaskModel> list = [];
-      for (Map<String, dynamic> jsonData in response.responseData['data']) {
-        list.add(TaskModel.fromJson(jsonData));
-      }
-      _progressTaskList = list;
-    } else {
-      showSnackBarMessage(context, response.errorMessage!);
-    }
-    _getProgressTaskInProgress = false;
-    setState(() {});
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ProgressTaskListProvider>().fetch();
+    });
   }
 
   @override
@@ -49,23 +27,24 @@ class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Visibility(
-          visible: _getProgressTaskInProgress == false,
-          replacement: CenteredProgressIndecator(),
-          child: ListView.separated(
-            itemCount: _progressTaskList.length,
-            itemBuilder: (context, index) {
-              return TaskCard(
-                taskModel: _progressTaskList[index],
-                refreshParent: () {
-                  _getAllProgressTasks();
-                },
-              );
-            },
-            separatorBuilder: (context, index) {
-              return SizedBox(height: 8);
-            },
-          ),
+        child: Consumer<ProgressTaskListProvider>(
+          builder: (_, p, __) {
+            if (p.loading) return const CenteredProgressIndecator();
+            if (p.error != null) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted) showSnackBarMessage(context, p.error!);
+              });
+            }
+            return ListView.separated(
+              itemCount: p.items.length,
+              itemBuilder: (_, i) => TaskCard(
+                taskModel: p.items[i],
+                refreshParent: () =>
+                    context.read<ProgressTaskListProvider>().fetch(),
+              ),
+              separatorBuilder: (_, __) => const SizedBox(height: 8),
+            );
+          },
         ),
       ),
     );
