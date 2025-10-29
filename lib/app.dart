@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:task_mngwithprovider/ui/controller/add_new_task_provider.dart';
+import 'package:task_mngwithprovider/ui/controller/forgot_password_otp_provider.dart';
+import 'package:task_mngwithprovider/ui/controller/forgot_password_provider.dart';
 import 'package:task_mngwithprovider/ui/controller/new_task_list_provider.dart';
+import 'package:task_mngwithprovider/ui/controller/reset_password_provider.dart';
+import 'package:task_mngwithprovider/ui/controller/sign_up_provider.dart';
+import 'package:task_mngwithprovider/ui/controller/task_list_provider.dart';
+import 'package:task_mngwithprovider/ui/controller/update_profile_provider.dart';
 import 'package:task_mngwithprovider/ui/screens/login_screen.dart';
 import 'package:task_mngwithprovider/ui/screens/main_nav_bar_holder_screen.dart';
 import 'package:task_mngwithprovider/ui/screens/sign_up_screen.dart';
@@ -15,7 +22,18 @@ class TaskManagerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => NewTaskListProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => NewTaskListProvider()),
+        ChangeNotifierProvider(create: (_) => UpdateProfileProvider()),
+        ChangeNotifierProvider(create: (_) => SignUpProvider()),
+        ChangeNotifierProvider(create: (_) => ResetPasswordProvider()),
+        ChangeNotifierProvider(create: (_) => ForgotPasswordEmailProvider()),
+        ChangeNotifierProvider(create: (_) => ForgotPasswordOtpProvider()),
+        ChangeNotifierProvider(create: (_) => AddNewTaskProvider()),
+        ChangeNotifierProvider(create: (_) => ProgressTaskListProvider()),
+        ChangeNotifierProvider(create: (_) => CompletedTaskListProvider()),
+        ChangeNotifierProvider(create: (_) => CancelledTaskListProvider()),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         navigatorKey: navigator,

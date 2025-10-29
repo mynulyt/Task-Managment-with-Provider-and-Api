@@ -1,21 +1,14 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:task_mngwithprovider/Data/model/user_model.dart';
-import 'package:task_mngwithprovider/Data/services/api_caller.dart';
-import 'package:task_mngwithprovider/Data/utils/urls.dart';
-import 'package:task_mngwithprovider/ui/controller/auth_controller.dart';
+import 'package:provider/provider.dart';
+import 'package:task_mngwithprovider/ui/controller/update_profile_provider.dart';
 import 'package:task_mngwithprovider/ui/widgets/centered_progress_indecator.dart';
 import 'package:task_mngwithprovider/ui/widgets/screen_background.dart';
 import 'package:task_mngwithprovider/ui/widgets/snak_bar_message.dart';
 import 'package:task_mngwithprovider/ui/widgets/tm_app_bar.dart';
-
 import '../widgets/photo_picker_field.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
-
   static const String name = '/update-profile';
 
   @override
@@ -23,27 +16,14 @@ class UpdateProfileScreen extends StatefulWidget {
 }
 
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
-  final TextEditingController _emailTEController = TextEditingController();
-  final TextEditingController _firstNameTEController = TextEditingController();
-  final TextEditingController _lastNameTEController = TextEditingController();
-  final TextEditingController _mobileTEController = TextEditingController();
-  final TextEditingController _passwordTEController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  final ImagePicker _imagePicker = ImagePicker();
-  XFile? _selectedImage;
-
-  bool _updateProfileInProgress = false;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    UserModel user = AuthController.userModel!;
-
-    _emailTEController.text = user.email;
-    _firstNameTEController.text = user.firstName;
-    _lastNameTEController.text = user.lastName;
-    _mobileTEController.text = user.mobile;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<UpdateProfileProvider>().hydrateFromAuth();
+    });
   }
 
   @override
@@ -51,171 +31,106 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     return Scaffold(
       appBar: TMAppBar(fromUpdateProfile: true),
       body: ScreenBackground(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Form(
-              key: _formKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 24),
-                  Text(
-                    'Update Profile',
-                    style: TextTheme.of(context).titleLarge,
+        child: Consumer<UpdateProfileProvider>(
+          builder: (_, p, __) {
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Form(
+                  key: _formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 24),
+                      Text(
+                        'Update Profile',
+                        style: TextTheme.of(context).titleLarge,
+                      ),
+                      const SizedBox(height: 24),
+                      PhotoPickerField(
+                        onTap: p.pickImage,
+                        selectedPhoto: p.selectedImage,
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: p.emailCtrl,
+                        decoration: const InputDecoration(hintText: 'Email'),
+                        enabled: false,
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: p.firstNameCtrl,
+                        decoration: const InputDecoration(
+                          hintText: 'First name',
+                        ),
+                        validator: (v) => (v?.trim().isEmpty ?? true)
+                            ? 'Enter your first name'
+                            : null,
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: p.lastNameCtrl,
+                        decoration: const InputDecoration(
+                          hintText: 'Last name',
+                        ),
+                        validator: (v) => (v?.trim().isEmpty ?? true)
+                            ? 'Enter your first name'
+                            : null,
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: p.mobileCtrl,
+                        decoration: const InputDecoration(hintText: 'Mobile'),
+                        validator: (v) => (v?.trim().isEmpty ?? true)
+                            ? 'Enter your first name'
+                            : null,
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: p.passwordCtrl,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          hintText: 'Password (Optional)',
+                        ),
+                        validator: (v) {
+                          if ((v != null && v.isNotEmpty) && v.length < 6) {
+                            return 'Enter a password more than 6 letters';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      Visibility(
+                        visible: p.loading == false,
+                        replacement: const CenteredProgressIndecator(),
+                        child: FilledButton(
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              final ok = await p.submit();
+                              if (ok) {
+                                if (mounted)
+                                  showSnackBarMessage(
+                                    context,
+                                    'Profile has been updated!',
+                                  );
+                              } else {
+                                if (mounted && p.error != null)
+                                  showSnackBarMessage(context, p.error!);
+                              }
+                            }
+                          },
+                          child: const Icon(Icons.arrow_circle_right_outlined),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 24),
-                  PhotoPickerField(
-                    onTap: _pickImage,
-                    selectedPhoto: _selectedImage,
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _emailTEController,
-                    decoration: InputDecoration(hintText: 'Email'),
-                    enabled: false,
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _firstNameTEController,
-                    decoration: InputDecoration(hintText: 'First name'),
-                    validator: (String? value) {
-                      if (value?.trim().isEmpty ?? true) {
-                        return 'Enter your first name';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _lastNameTEController,
-                    decoration: InputDecoration(hintText: 'Last name'),
-                    validator: (String? value) {
-                      if (value?.trim().isEmpty ?? true) {
-                        return 'Enter your first name';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _mobileTEController,
-                    decoration: InputDecoration(hintText: 'Mobile'),
-                    validator: (String? value) {
-                      if (value?.trim().isEmpty ?? true) {
-                        return 'Enter your first name';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _passwordTEController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      hintText: 'Password (Optional)',
-                    ),
-                    validator: (String? value) {
-                      if ((value != null && value.isNotEmpty) &&
-                          value.length < 6) {
-                        return 'Enter a password more than 6 letters';
-                      }
-
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  Visibility(
-                    visible: _updateProfileInProgress == false,
-                    replacement: CenteredProgressIndecator(),
-                    child: FilledButton(
-                      onPressed: _onTapUpdateButton,
-                      child: Icon(Icons.arrow_circle_right_outlined),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );
-  }
-
-  void _onTapUpdateButton() {
-    if (_formKey.currentState!.validate()) {
-      _updateProfile();
-    }
-  }
-
-  Future<void> _updateProfile() async {
-    _updateProfileInProgress = true;
-    setState(() {});
-
-    final Map<String, dynamic> requestBody = {
-      "email": _emailTEController.text,
-      "firstName": _firstNameTEController.text.trim(),
-      "lastName": _lastNameTEController.text.trim(),
-      "mobile": _mobileTEController.text.trim(),
-    };
-
-    if (_passwordTEController.text.isNotEmpty) {
-      requestBody['password'] = _passwordTEController.text;
-    }
-
-    String? encodedPhoto;
-
-    if (_selectedImage != null) {
-      List<int> bytes = await _selectedImage!.readAsBytes();
-      encodedPhoto = jsonEncode(bytes);
-      requestBody['photo'] = encodedPhoto;
-    }
-
-    final ApiResponse response = await ApiCaller.postRequest(
-      url: Urls.updateProfileUrl,
-      body: requestBody,
-    );
-
-    _updateProfileInProgress = false;
-    setState(() {});
-
-    if (response.isSuccess) {
-      _passwordTEController.clear();
-
-      UserModel model = UserModel(
-        id: AuthController.userModel!.id,
-        email: _emailTEController.text,
-        firstName: _firstNameTEController.text.trim(),
-        lastName: _lastNameTEController.text.trim(),
-        mobile: _mobileTEController.text.trim(),
-        photo: encodedPhoto ?? AuthController.userModel!.photo,
-      );
-      await AuthController.updateUserData(model);
-
-      showSnackBarMessage(context, 'Profile has been updated!');
-    } else {
-      showSnackBarMessage(context, response.errorMessage!);
-    }
-  }
-
-  Future<void> _pickImage() async {
-    XFile? pickedImage = await _imagePicker.pickImage(
-      source: ImageSource.gallery,
-    );
-    if (pickedImage != null) {
-      _selectedImage = pickedImage;
-      setState(() {});
-    }
-  }
-
-  @override
-  void dispose() {
-    _emailTEController.dispose();
-    _firstNameTEController.dispose();
-    _lastNameTEController.dispose();
-    _mobileTEController.dispose();
-    _passwordTEController.dispose();
-    super.dispose();
   }
 }
