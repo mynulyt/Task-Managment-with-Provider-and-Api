@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:task_mngwithprovider/Data/model/task_model.dart';
 import 'package:task_mngwithprovider/Data/model/task_status_count.dart';
 import 'package:task_mngwithprovider/Data/services/api_caller.dart';
 import 'package:task_mngwithprovider/Data/utils/urls.dart';
+import 'package:task_mngwithprovider/ui/controller/new_task_list_provider.dart';
 import 'package:task_mngwithprovider/ui/screens/add_new_task_screen.dart';
 import 'package:task_mngwithprovider/ui/widgets/centered_progress_indecator.dart';
 import 'package:task_mngwithprovider/ui/widgets/snak_bar_message.dart';
@@ -97,23 +99,27 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
               ),
             ),
             Expanded(
-              child: Visibility(
-                visible: _getNewTaskInProgress == false,
-                replacement: CenteredProgressIndecator(),
-                child: ListView.separated(
-                  itemCount: _newTaskList.length,
-                  itemBuilder: (context, index) {
-                    return TaskCard(
-                      taskModel: _newTaskList[index],
-                      refreshParent: () {
-                        _getAllNewTasks();
+              child: Consumer<NewTaskListProvider>(
+                builder: (context, newTaskListProvider, _) {
+                  return Visibility(
+                    visible: newTaskListProvider.getNewTasksProgress == false,
+                    replacement: CenteredProgressIndecator(),
+                    child: ListView.separated(
+                      itemCount: newTaskListProvider.newTaskList.length,
+                      itemBuilder: (context, index) {
+                        return TaskCard(
+                          taskModel: newTaskListProvider.newTaskList[index],
+                          refreshParent: () {
+                            context.read<NewTaskListProvider>().getNewTasks();
+                          },
+                        );
                       },
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return SizedBox(height: 8);
-                  },
-                ),
+                      separatorBuilder: (context, index) {
+                        return SizedBox(height: 8);
+                      },
+                    ),
+                  );
+                },
               ),
             ),
           ],
