@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:task_mngwithprovider/ui/controller/forgot_password_provider.dart';
+import 'package:task_mngwithprovider/ui/provider_controller/forgot_password_provider.dart';
 
 import 'package:task_mngwithprovider/ui/screens/forgot_password_verify_otp_screen.dart';
 import 'package:task_mngwithprovider/ui/widgets/screen_background.dart';

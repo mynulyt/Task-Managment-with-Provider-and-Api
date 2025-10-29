@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:task_mngwithprovider/Data/model/user_model.dart';
 import 'package:task_mngwithprovider/Data/services/api_caller.dart';
 import 'package:task_mngwithprovider/Data/utils/urls.dart';
-import 'package:task_mngwithprovider/ui/controller/auth_controller.dart';
+import 'package:task_mngwithprovider/ui/provider_controller/auth_controller.dart';
 
 class UpdateProfileProvider extends ChangeNotifier {
   final emailCtrl = TextEditingController();

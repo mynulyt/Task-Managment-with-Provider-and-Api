@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:task_mngwithprovider/ui/controller/reset_password_provider.dart';
+import 'package:task_mngwithprovider/ui/provider_controller/reset_password_provider.dart';
 import 'package:task_mngwithprovider/ui/screens/login_screen.dart';
 import 'package:task_mngwithprovider/ui/widgets/screen_background.dart';
 

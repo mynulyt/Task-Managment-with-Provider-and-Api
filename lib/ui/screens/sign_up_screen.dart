@@ -2,7 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:task_mngwithprovider/ui/controller/sign_up_provider.dart';
+import 'package:task_mngwithprovider/ui/provider_controller/sign_up_provider.dart';
 import 'package:task_mngwithprovider/ui/widgets/centered_progress_indecator.dart';
 import 'package:task_mngwithprovider/ui/widgets/screen_background.dart';
 import 'package:task_mngwithprovider/ui/widgets/snak_bar_message.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:task_mngwithprovider/ui/controller/task_list_provider.dart';
+import 'package:task_mngwithprovider/ui/provider_controller/task_list_provider.dart';
 import 'package:task_mngwithprovider/ui/widgets/centered_progress_indecator.dart';
 import 'package:task_mngwithprovider/ui/widgets/snak_bar_message.dart';
 

@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:task_mngwithprovider/Data/model/task_status_count.dart';
 import 'package:task_mngwithprovider/Data/services/api_caller.dart';
 import 'package:task_mngwithprovider/Data/utils/urls.dart';
-import 'package:task_mngwithprovider/ui/controller/new_task_list_provider.dart';
+import 'package:task_mngwithprovider/ui/provider_controller/new_task_list_provider.dart';
 import 'package:task_mngwithprovider/ui/screens/add_new_task_screen.dart';
 import 'package:task_mngwithprovider/ui/widgets/centered_progress_indecator.dart';
 import 'package:task_mngwithprovider/ui/widgets/snak_bar_message.dart';
