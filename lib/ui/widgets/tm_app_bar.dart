@@ -1,69 +1,84 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'package:task_mngwithprovider/ui/provider_controller/app_bar_provider.dart';
-import 'package:task_mngwithprovider/ui/screens/login_screen.dart';
-import 'package:task_mngwithprovider/ui/screens/update_profile_screen.dart';
 
-class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
+class TMAppBar extends StatefulWidget implements PreferredSizeWidget {
   const TMAppBar({super.key, this.fromUpdateProfile});
 
   final bool? fromUpdateProfile;
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  State<TMAppBar> createState() => _TMAppBarState();
 
   @override
-  Widget build(BuildContext context) {
-    final p = context.watch<AppBarProvider>();
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
 
+class _TMAppBarState extends State<TMAppBar> {
+  @override
+  Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.purpleAccent,
       title: GestureDetector(
-        onTap: () {
-          if (fromUpdateProfile ?? false) return;
-          Navigator.pushNamed(context, UpdateProfileScreen.name);
-        },
+        onTap: () => context.read<AppBarProvider>().goToUpdateProfile(
+          context,
+          fromUpdateProfile: widget.fromUpdateProfile ?? false,
+        ),
         child: Row(
-          spacing: 8,
           children: [
-            CircleAvatar(
-              child: p.photoBytes != null
-                  ? Image.memory(p.photoBytes!)
-                  : const Icon(Icons.person),
+            Selector<AppBarProvider, Uint8List?>(
+              selector: (_, p) => p.photoBytes,
+              builder: (context, bytes, _) {
+                if (bytes != null && bytes.isNotEmpty) {
+                  return CircleAvatar(
+                    radius: 18,
+                    backgroundImage: MemoryImage(bytes),
+                  );
+                }
+                return const CircleAvatar(
+                  radius: 18,
+                  child: Icon(Icons.person),
+                );
+              },
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  p.fullName,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleSmall?.copyWith(color: Colors.white),
-                ),
-                Text(
-                  p.email,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall?.copyWith(color: Colors.white),
-                ),
-              ],
+            const SizedBox(width: 6),
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Selector<AppBarProvider, String>(
+                    selector: (_, p) => p.fullName,
+                    builder: (context, name, _) => Text(
+                      name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleSmall?.copyWith(color: Colors.white),
+                    ),
+                  ),
+                  Selector<AppBarProvider, String>(
+                    selector: (_, p) => p.email,
+                    builder: (context, email, _) => Text(
+                      email,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodySmall?.copyWith(color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
       actions: [
         IconButton(
-          onPressed: () async {
-            await context.read<AppBarProvider>().signOut();
-            if (context.mounted) {
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                LoginScreen.name,
-                (predicate) => false,
-              );
-            }
-          },
+          onPressed: () => context.read<AppBarProvider>().signOut(context),
           icon: const Icon(Icons.logout),
         ),
       ],

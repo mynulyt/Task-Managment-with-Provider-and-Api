@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_mngwithprovider/ui/provider_controller/add_new_task_provider.dart';
+import 'package:task_mngwithprovider/ui/provider_controller/app_bar_provider.dart';
+
 import 'package:task_mngwithprovider/ui/provider_controller/forgot_password_otp_provider.dart';
 import 'package:task_mngwithprovider/ui/provider_controller/forgot_password_provider.dart';
 import 'package:task_mngwithprovider/ui/provider_controller/new_task_list_provider.dart';
@@ -23,6 +25,7 @@ class TaskManagerApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => AppBarProvider()),
         ChangeNotifierProvider(create: (_) => NewTaskListProvider()),
         ChangeNotifierProvider(create: (_) => UpdateProfileProvider()),
         ChangeNotifierProvider(create: (_) => SignUpProvider()),

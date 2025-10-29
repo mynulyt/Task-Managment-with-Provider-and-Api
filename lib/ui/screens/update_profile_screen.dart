@@ -5,6 +5,9 @@ import 'package:task_mngwithprovider/ui/widgets/centered_progress_indecator.dart
 import 'package:task_mngwithprovider/ui/widgets/screen_background.dart';
 import 'package:task_mngwithprovider/ui/widgets/snak_bar_message.dart';
 import 'package:task_mngwithprovider/ui/widgets/tm_app_bar.dart';
+
+import 'package:task_mngwithprovider/ui/provider_controller/app_bar_provider.dart';
+
 import '../widgets/photo_picker_field.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
@@ -29,7 +32,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TMAppBar(fromUpdateProfile: true),
+      appBar: const TMAppBar(fromUpdateProfile: true),
       body: ScreenBackground(
         child: Consumer<UpdateProfileProvider>(
           builder: (_, p, __) {
@@ -45,7 +48,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       const SizedBox(height: 24),
                       Text(
                         'Update Profile',
-                        style: TextTheme.of(context).titleLarge,
+
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(height: 24),
                       PhotoPickerField(
@@ -75,7 +79,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           hintText: 'Last name',
                         ),
                         validator: (v) => (v?.trim().isEmpty ?? true)
-                            ? 'Enter your first name'
+                            ? 'Enter your last name'
                             : null,
                       ),
                       const SizedBox(height: 8),
@@ -83,7 +87,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         controller: p.mobileCtrl,
                         decoration: const InputDecoration(hintText: 'Mobile'),
                         validator: (v) => (v?.trim().isEmpty ?? true)
-                            ? 'Enter your first name'
+                            ? 'Enter your mobile'
                             : null,
                       ),
                       const SizedBox(height: 8),
@@ -109,14 +113,18 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                             if (_formKey.currentState!.validate()) {
                               final ok = await p.submit();
                               if (ok) {
-                                if (mounted)
-                                  showSnackBarMessage(
-                                    context,
-                                    'Profile has been updated!',
-                                  );
+                                if (!mounted) return;
+
+                                context.read<AppBarProvider>().refresh();
+
+                                showSnackBarMessage(
+                                  context,
+                                  'Profile has been updated!',
+                                );
                               } else {
-                                if (mounted && p.error != null)
+                                if (mounted && p.error != null) {
                                   showSnackBarMessage(context, p.error!);
+                                }
                               }
                             }
                           },

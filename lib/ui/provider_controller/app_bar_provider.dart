@@ -1,44 +1,43 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:flutter/foundation.dart';
 
+import 'package:flutter/material.dart';
 import 'package:task_mngwithprovider/ui/provider_controller/auth_controller.dart';
+import 'package:task_mngwithprovider/ui/screens/login_screen.dart';
+import 'package:task_mngwithprovider/ui/screens/update_profile_screen.dart';
 
 class AppBarProvider extends ChangeNotifier {
-  String _fullName = '';
-  String _email = '';
-  Uint8List? _photoBytes;
+  String get fullName => AuthController.userModel?.fullName ?? '';
+  String get email => AuthController.userModel?.email ?? '';
 
-  String get fullName => _fullName;
-  String get email => _email;
-  Uint8List? get photoBytes => _photoBytes;
-
-  void hydrateFromAuth() {
-    final u = AuthController.userModel;
-    if (u == null) return;
-
-    _fullName = u.fullName ?? '';
-    _email = u.email;
-
-    if ((u.photo ?? '').isNotEmpty) {
-      try {
-        final decoded = jsonDecode(u.photo!) as List<dynamic>;
-        _photoBytes = Uint8List.fromList(decoded.cast<int>());
-      } catch (_) {
-        _photoBytes = null;
-      }
-    } else {
-      _photoBytes = null;
+  Uint8List? get photoBytes {
+    final raw = AuthController.userModel?.photo;
+    if (raw == null || raw.isEmpty) return null;
+    try {
+      return base64Decode(raw);
+    } catch (_) {
+      return null;
     }
-
-    notifyListeners();
   }
 
-  Future<void> signOut() async {
+  void goToUpdateProfile(
+    BuildContext context, {
+    bool fromUpdateProfile = false,
+  }) {
+    if (fromUpdateProfile) return;
+    Navigator.pushNamed(context, UpdateProfileScreen.name);
+  }
+
+  Future<void> signOut(BuildContext context) async {
     await AuthController.clearUserData();
-    _fullName = '';
-    _email = '';
-    _photoBytes = null;
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      LoginScreen.name,
+      (predicate) => false,
+    );
+  }
+
+  void refresh() {
     notifyListeners();
   }
 }
