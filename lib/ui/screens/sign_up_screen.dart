@@ -92,15 +92,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             if (_formKey.currentState!.validate()) {
                               final ok = await p.submit();
                               if (ok) {
-                                if (mounted)
+                                if (mounted) {
                                   showSnackBarMessage(
                                     context,
                                     'Registration Success! Please login',
                                   );
+                                }
                                 if (mounted) Navigator.pop(context);
                               } else if (p.error != null) {
-                                if (mounted)
+                                if (mounted) {
                                   showSnackBarMessage(context, p.error!);
+                                }
                               }
                             }
                           },
